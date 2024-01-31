@@ -425,8 +425,8 @@ class LlamaAttention(nn.Module):
                 )
             attn_weights = attn_weights + attention_mask
 
-        # upcast attention to fp32
-        attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
+        # don't upcast attention to fp32
+        attn_weights = nn.functional.softmax(attn_weights, dim=-1)
         attn_weights = nn.functional.dropout(attn_weights, p=self.attention_dropout, training=self.training)
         attn_output = torch.matmul(attn_weights, value_states)
 
